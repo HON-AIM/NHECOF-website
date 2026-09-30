@@ -33,7 +33,7 @@
   "devDependencies": {
     "@eslint/js": "^9.28.0",
     "chrome-launcher": "^1.2.1",
-    "eslint": "^9.28.0",
+    "eslint": "^10.11.0",
     "eslint-config-prettier": "^10.1.0",
     "lighthouse": "^13.5.0",
     "prettier": "^3.5.0",
