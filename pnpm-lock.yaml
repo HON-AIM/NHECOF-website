@@ -185,8 +185,8 @@ importers:
         specifier: ^13.5.0
         version: 13.5.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(supports-color@8.1.1)(yauzl@2.10.0)
       prettier:
-        specifier: ^3.5.0
-        version: 3.9.8
+        specifier: ^3.9.9
+        version: 3.9.9
       typescript-eslint:
         specifier: ^8.33.0
         version: 8.70.0(eslint@9.39.5(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.9.3)
@@ -5875,8 +5875,8 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  prettier@3.9.8:
-    resolution: {integrity: sha512-WRFq3Wn3WId7LLROfMLdH7xaFr2jR62wU8nLO6rQUOLOxNZUviyJQs1M0iIhLexSFy+L+w0ch66wtoO2jRjG0A==}
+  prettier@3.9.9:
+    resolution: {integrity: sha512-Z/CJHIkdujO/OtN7nXUii0Rf3VT5SRuhjBA82Xvu2XhBUgX3nhP67T0LHceBdQLex7OOFGTox+Q5Yg8Jk2Qivg==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -6589,9 +6589,6 @@ packages:
   tinyspy@4.0.6:
     resolution: {integrity: sha512-u8KszXvGfU68hVcZpRHKG28T0krMuv2G5nDhiHaMLen/gIuFEgIJhaJuO69qjnXg5paSrbPMFfx3brNuN8eVSg==}
     engines: {node: '>=14.0.0'}
-
-  tldts-core@7.4.13:
-    resolution: {integrity: sha512-mbYsrih5FRtGxs3Usvl/PqwJsNpp+jsmrdFviiK02teHDG0/HebBG/pqCylje3kzgXYzuLoHJF/0mz9W53t8Xg==}
 
   tldts-core@7.4.15:
     resolution: {integrity: sha512-ERuv0p98XgSzmlSLJr8vDNxX+uATGInlN97V3R+JpYWaSqn5IG3ewWgCwczk4bkOpgth/o8Nt5FOi4B4w0n/1A==}
@@ -9691,7 +9688,7 @@ snapshots:
       get-it: 8.8.3
       groq-js: 1.30.3(supports-color@8.1.1)
       pkg-dir: 5.0.0
-      prettier: 3.9.8
+      prettier: 3.9.9
       semver: 7.8.5
       validate-npm-package-name: 3.0.0
     transitivePeerDependencies:
@@ -13044,7 +13041,7 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier@3.9.8: {}
+  prettier@3.9.9: {}
 
   pretty-ms@7.0.1:
     dependencies:
@@ -13984,8 +13981,6 @@ snapshots:
 
   tinyspy@4.0.6: {}
 
-  tldts-core@7.4.13: {}
-
   tldts-core@7.4.15: {}
 
   tldts-icann@7.4.15:
@@ -13994,7 +13989,7 @@ snapshots:
 
   tldts@7.4.13:
     dependencies:
-      tldts-core: 7.4.13
+      tldts-core: 7.4.15
 
   to-buffer@1.2.2:
     dependencies:
