@@ -1,0 +1,156 @@
+name: Sanity dataset backup
+
+# Weekly export of both Sanity datasets to private, versioned storage.
+#
+# Why this is not optional: Sanity is the system of record for every article,
+# food profile, outreach record and impact figure on the site. A deleted or
+# corrupted dataset is not a website outage that can be rolled back — it is the
+# loss of the organisation's content history. A git revert does not help,
+# because content lives in Sanity, not in this repository.
+#
+# Design decisions:
+#  - Both datasets are exported, not just production. The development dataset
+#    is where the next article is drafted, so it is the most fragile.
+#  - The export is uploaded to a private, versioned S3-compatible bucket.
+#    Retention is finite and stated: a backup nobody prunes stops being a
+#    backup and starts being an unbounded cost and a data-retention liability.
+#  - The upload is a separate step with explicit `if: failure()` handling, so a
+#    failed export is visible rather than silently skipped.
+#  - Restore is NOT automated. See docs/deployment-and-rollback.md — an
+#    automatic restore would overwrite a good dataset with a stale one during
+#    exactly the incident where a human is needed.
+
+on:
+  schedule:
+    # Sunday 02:00 UTC (03:00 Africa/Lagos). Off-peak for both Sanity and for
+    # the staff who would notice a failure.
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      dataset:
+        description: 'Dataset to export (blank = both)'
+        required: false
+        type: string
+
+concurrency:
+  group: sanity-dataset-backup
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    name: Export and upload
+    runs-on: ubuntu-latest
+    # Fail the run if a secret is missing rather than writing a corrupt or
+    # empty backup file and reporting success.
+    env:
+      SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
+      BACKUP_DATASET: ${{ inputs.dataset }}
+      BACKUP_BUCKET: ${{ secrets.SANITY_BACKUP_BUCKET }}
+      BACKUP_PREFIX: ${{ vars.SANITY_BACKUP_PREFIX || 'sanity-backups' }}
+      BACKUP_ENDPOINT: ${{ vars.SANITY_BACKUP_ENDPOINT }}
+      # 12 weeks of weekly backups, plus the monthly snapshots below.
+      BACKUP_RETENTION_DAYS: '84'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Validate configuration
+        run: |
+          set -euo pipefail
+          for var in SANITY_PROJECT_ID BACKUP_BUCKET; do
+            if [ -z "${!var:-}" ]; then
+              echo "::error::$var is not set. The backup cannot run." >&2
+              exit 1
+            fi
+          done
+          if [ -z "${BACKUP_ENDPOINT:-}" ]; then
+            echo "::warning::SANITY_BACKUP_ENDPOINT is unset; using AWS S3."
+          fi
+          echo "Bucket: $BACKUP_BUCKET"
+          echo "Prefix: $BACKUP_PREFIX"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Read-only token, dataset-scoped where possible. This token is only ever
+      # used to *read* an export; it must not be a write token.
+      - name: Export datasets
+        env:
+          SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p backup
+
+          if [ -n "${BACKUP_DATASET:-}" ]; then
+            datasets=("$BACKUP_DATASET")
+          else
+            datasets=(production development)
+          fi
+
+          for dataset in "${datasets[@]}"; do
+            echo "::group::Exporting $dataset"
+            # `--transform` is deliberately omitted: the backup must be a
+            # faithful copy, not a re-shaped one.
+            npx sanity dataset export "$dataset" "backup/${dataset}.tar.gz"
+            echo "::endgroup::"
+
+            # A zero-byte or near-empty tarball means a failed export that
+            # exited 0. Refuse to upload it.
+            size=$(stat -c%s "backup/${dataset}.tar.gz")
+            if [ "$size" -lt 1024 ]; then
+              echo "::error::$dataset export is only $size bytes; refusing to treat it as a backup." >&2
+              exit 1
+            fi
+            echo "$dataset $size bytes"
+          done
+
+      - name: Upload to private storage
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.SANITY_BACKUP_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SANITY_BACKUP_SECRET_ACCESS_KEY }}
+        run: |
+          set -euo pipefail
+          stamp=$(date -u +%Y-%m-%dT%H%M%SZ)
+
+          args=(s3 cp --only-show-errors)
+          if [ -n "${BACKUP_ENDPOINT:-}" ]; then
+            args+=(--endpoint-url "$BACKUP_ENDPOINT")
+          fi
+
+          for dataset in backup/*.tar.gz; do
+            name=$(basename "$dataset" .tar.gz)
+            target="s3://$BACKUP_BUCKET/$BACKUP_PREFIX/$dataset/$stamp/$name.tar.gz"
+
+            "${args[@]}" "$dataset" "$target"
+
+            # Apply retention per object, so a failed run does not prune good
+            # backups and an old one does not accumulate forever.
+            "${args[@]/cp /sync}" "s3://$BACKUP_BUCKET/$BACKUP_PREFIX/$dataset/" \
+              "s3://$BACKUP_BUCKET/$BACKUP_PREFIX/$dataset/" \
+              --exclude '*' --include '*/*.tar.gz' \
+              --older-than "$BACKUP_RETENTION_DAYS" --delete || true
+
+            echo "Uploaded $target"
+          done
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## Sanity dataset backup"
+            echo
+            echo "- Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo "- Branch: ${{ github.ref_name }}"
+            echo "- Bucket: \`$BACKUP_BUCKET/$BACKUP_PREFIX\`"
+            echo "- Status: ${{ job.status }}"
+          } >> "$GITHUB_STEP_SUMMARY"

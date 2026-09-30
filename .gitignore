@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+
+# Sanity
+apps/studio/.sanity/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build
+dist/
+build/
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test
+coverage/
+test-results/
+playwright-report/
+
+# Generated quality reports (Lighthouse/a11y/screenshots) - regenerate with pnpm check:*
+quality-results/
+
+# Misc
+*.log
+npm-debug.log*
+pnpm-debug.log*

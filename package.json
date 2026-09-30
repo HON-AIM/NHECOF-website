@@ -1,0 +1,42 @@
+{
+  "name": "nhecof-website",
+  "private": true,
+  "packageManager": "pnpm@12.5.1",
+  "scripts": {
+    "dev": "pnpm --parallel --filter web --filter studio run dev",
+    "build": "pnpm --filter web run build && node scripts/check-client-secrets.mjs",
+    "typecheck": "pnpm --parallel --filter web --filter studio run typecheck",
+    "lint": "pnpm --filter web run lint",
+    "test": "pnpm --filter web run test",
+    "e2e": "pnpm --filter web run e2e",
+    "validate:content": "pnpm --filter web exec vitest run __tests__/content-consistency.test.ts",
+    "typegen": "pnpm --filter studio run typegen",
+    "seed": "pnpm --filter studio run seed",
+    "check:contrast": "node scripts/check-contrast.mjs",
+    "check:placeholders": "node scripts/check-placeholders.mjs",
+    "check:client-secrets": "node scripts/check-client-secrets.mjs",
+    "check:bundle": "node scripts/check-bundle-size.mjs",
+    "check:a11y:docs": "node scripts/check-a11y-checklist.mjs",
+    "check:audit": "node scripts/audit-gate.mjs",
+    "quality:test": "pnpm --filter web exec vitest run --reporter=json --outputFile=../../quality-results/vitest/results.json",
+    "quality:bundle": "node scripts/check-bundle-size.mjs",
+    "quality:lighthouse": "node scripts/lighthouse.mjs",
+    "quality:report": "node scripts/generate-quality-report.mjs",
+    "quality:all": "pnpm quality:test && pnpm quality:bundle && pnpm quality:lighthouse && pnpm quality:report",
+    "prebuild": "node scripts/check-placeholders.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "review:reminders": "pnpm --filter web exec node scripts/send-review-reminders.mjs",
+    "review:reminders:dry": "pnpm --filter web exec node scripts/send-review-reminders.mjs --dry-run",
+    "review:reminders:test": "pnpm --filter web exec node --test scripts/lib/review-reminders.test.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.28.0",
+    "chrome-launcher": "^1.2.1",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.0",
+    "lighthouse": "^13.5.0",
+    "prettier": "^3.5.0",
+    "typescript-eslint": "^8.33.0"
+  }
+}

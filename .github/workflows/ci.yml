@@ -1,0 +1,125 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so a secret committed and later removed is still found.
+          fetch-depth: 0
+
+      - name: Gitleaks (committed history)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          # Do not fail the run for pre-existing findings; NHECOF must triage
+          # and record them before this is turned into a blocking gate.
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: 'true'
+        with:
+          args: detect --redact --no-banner --exit-code 0 --report-format sarif --report-path gitleaks.sarif
+
+      - name: Fail on any secret in the working tree
+        run: |
+          # Defence in depth: gitleaks scans history, this greps the tree that is
+          # actually deployed. Catches a secret added in a file type gitleaks
+          # does not parse, and fails the build rather than just reporting.
+          if git ls-files -z | xargs -0 grep -InE \
+            '(sk_live_[A-Za-z0-9]{16,}|re_[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----)' \
+            --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=quality-results; then
+            echo "::error::A credential pattern was committed. Rotate the secret immediately."
+            exit 1
+          fi
+          echo "No credential patterns found in tracked files."
+
+  dependency-audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Dependency audit gate
+        # The gate distinguishes the deployed server (apps/web) from the static
+        # Studio bundle, allows only reviewed+in-date exceptions, and writes a
+        # human-readable report. --prod is baked in: a devDependency (Playwright,
+        # ESLint) never ships, and gating on it produces alert fatigue that ends
+        # with the gate being disabled.
+        run: node scripts/audit-gate.mjs
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-audit
+          path: |
+            security/audit-exceptions.json
+            quality-results/dependency-audit.md
+          if-no-files-found: ignore
+          retention-days: 30
+
+  ci:
+    name: Typecheck, Lint, Test, Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Test
+        run: pnpm test
+
+      - name: Validate content consistency
+        run: pnpm validate:content
+        env:
+          NEXT_PUBLIC_SANITY_PROJECT_ID: test
+          NEXT_PUBLIC_SANITY_DATASET: production
+
+      - name: Build
+        run: pnpm build
+        env:
+          NEXT_PUBLIC_SANITY_PROJECT_ID: test
+          NEXT_PUBLIC_SANITY_DATASET: production
+          NEXT_PUBLIC_SANITY_API_VERSION: "2024-01-01"
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: test
+          NEXT_PUBLIC_IS_LIVE: "false"
+          SANITY_API_READ_TOKEN: test
+          SANITY_REVALIDATE_SECRET: test
+          RESEND_API_KEY: test
+          CONTACT_RECIPIENT_EMAIL: test@example.com
+          OUTREACH_RECIPIENT_EMAIL: test@example.com
+          PARTNERSHIP_RECIPIENT_EMAIL: test@example.com
+          TURNSTILE_SECRET_KEY: test
+          UPSTASH_REDIS_REST_URL: https://test.upstash.io
+          UPSTASH_REDIS_REST_TOKEN: test

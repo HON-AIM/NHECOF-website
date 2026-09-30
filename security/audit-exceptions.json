@@ -1,0 +1,98 @@
+{
+  "$comment": [
+    "Reviewed exceptions for `pnpm audit`.",
+    "",
+    "A gate that cannot pass gets switched off, and a switched-off gate protects",
+    "nothing. These entries record advisories that are known, understood and",
+    "accepted, each with a named owner and a review date. The gate in",
+    "scripts/audit-gate.mjs fails when:",
+    "  - a high/critical advisory is NOT listed here, or",
+    "  - a listed advisory is past its reviewBy date (forces periodic re-triage),",
+    "  - or the listed module is no longer reported (stale exception).",
+    "",
+    "Scope rule: apps/web is the deployed server and must be clean with no",
+    "exceptions. apps/studio is deployed as a static bundle, so its node_modules",
+    "never reach a browser or a server; its advisories are build-toolchain risk",
+    "on developer machines and in CI, not runtime risk for the public site."
+  ],
+  "exceptions": [
+    {
+      "id": "GHSA-mp2f-45pm-3cg9",
+      "module": "decompress",
+      "severity": "critical",
+      "scope": "apps/studio",
+      "path": "apps/studio>sanity>@sanity/cli>decompress",
+      "reason": "Archive-extraction path traversal inside the Sanity CLI. Reachable only when a developer or CI runs a Sanity CLI command that imports or extracts an archive. Not shipped: the Studio is a static bundle and node_modules are never deployed.",
+      "fixAvailable": false,
+      "upstream": "Await a Sanity CLI release that updates or drops @sanity/cli's decompress dependency.",
+      "owner": "NHECOF technical maintainer",
+      "reviewedOn": "2026-09-29",
+      "reviewBy": "2026-12-29"
+    },
+    {
+      "id": "GHSA-xcpc-8h2w-3j85",
+      "module": "adm-zip",
+      "severity": "high",
+      "scope": "apps/studio",
+      "path": "apps/studio>sanity>@sanity/cli>@sanity/runtime-cli>adm-zip",
+      "reason": "Crafted-ZIP memory exhaustion in the Sanity CLI. Same reachability as the decompress exception: build-time CLI only, not deployed.",
+      "fixAvailable": true,
+      "upstream": "Advisory states adm-zip >= 0.6.0 resolves it. Cannot be forced without a pnpm override, because the vulnerable path is inside the Sanity framework's own dependency tree and overriding it risks breaking Studio builds. Re-check when Sanity updates.",
+      "owner": "NHECOF technical maintainer",
+      "reviewedOn": "2026-09-29",
+      "reviewBy": "2026-12-29"
+    },
+    {
+      "id": "GHSA-7q85-xj36-vmfc",
+      "module": "adm-zip",
+      "severity": "high",
+      "scope": "apps/studio",
+      "path": "apps/studio>sanity>@sanity/cli>@sanity/runtime-cli>adm-zip",
+      "reason": "Second adm-zip advisory (declared-uncompressed-size memory allocation). Same reachability and same resolution as GHSA-xcpc-8h2w-3j85.",
+      "fixAvailable": true,
+      "upstream": "Track with GHSA-xcpc-8h2w-3j85.",
+      "owner": "NHECOF technical maintainer",
+      "reviewedOn": "2026-09-29",
+      "reviewBy": "2026-12-29"
+    },
+    {
+      "id": "GHSA-5j98-mcp5-4vw2",
+      "module": "glob",
+      "severity": "high",
+      "scope": "apps/studio",
+      "path": "apps/studio>sanity>@sanity/cli>@sanity/runtime-cli>@architect/inventory",
+      "reason": "Command injection in the glob CLI's -c/--cmd flag. NHECOF never invokes glob with -c; the flag is not used by any script in this repository. Build-time CLI only.",
+      "fixAvailable": true,
+      "upstream": "Advisory states glob >= 12.0.0 resolves it, inside the Sanity framework's tree.",
+      "owner": "NHECOF technical maintainer",
+      "reviewedOn": "2026-09-29",
+      "reviewBy": "2026-12-29"
+    },
+    {
+      "id": "GHSA-x5rq-j2xg-h7qm",
+      "module": "prismjs",
+      "severity": "moderate",
+      "scope": "apps/studio",
+      "path": "apps/studio>sanity>@sanity/insert-menu>@sanity/ui>react-refractor>refractor>prismjs",
+      "reason": "DOM clobbering in the Studio's syntax highlighter. Only used for code blocks inside the Studio UI, which is access-restricted to invited NHECOF accounts. Not present in the public site.",
+      "fixAvailable": true,
+      "upstream": "Await a @sanity/ui update.",
+      "owner": "NHECOF technical maintainer",
+      "reviewedOn": "2026-09-29",
+      "reviewBy": "2026-12-29"
+    },
+    {
+      "id": "GHSA-jc9c-9xq6-3fj2",
+      "module": "uuid",
+      "severity": "moderate",
+      "scope": "apps/studio",
+      "path": "apps/studio>sanity>@sanity/preview-url-secret>@sanity/uuid>uuid",
+      "reason": "Weak random generation in a Studio preview-URL helper. Preview URL secrets are derived server-side; the advisory does not affect the public site's preview secret, which is generated and compared by this repository's own code (apps/web/src/lib/sanity/preview.ts).",
+      "fixAvailable": true,
+      "upstream": "Await a @sanity/uuid update.",
+      "owner": "NHECOF technical maintainer",
+      "reviewedOn": "2026-09-29",
+      "reviewBy": "2026-12-29"
+    }
+  ]
+}

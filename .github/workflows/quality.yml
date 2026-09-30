@@ -1,0 +1,168 @@
+name: Quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Typecheck · lint · unit · build · budgets
+    runs-on: ubuntu-latest
+    env:
+      SKIP_CLIENT_SECRETS_CHECK: 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.5.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Unit tests (JSON report)
+        run: pnpm quality:test
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Placeholder scan (informational while CMS content is pending)
+        run: pnpm check:placeholders
+        continue-on-error: true
+
+      - name: Build
+        run: pnpm --filter web run build
+
+      - name: Client secrets scan
+        run: pnpm check:client-secrets
+
+      - name: JS bundle budgets
+        run: pnpm check:bundle
+
+      - name: Upload unit results
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-results-check
+          path: quality-results/
+
+  e2e:
+    name: Playwright (production build) + axe + snapshots
+    runs-on: ubuntu-latest
+    needs: check
+    env:
+      SKIP_PLACEHOLDER_CHECK: 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.5.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm --filter web exec playwright install --with-deps chromium
+
+      - name: Build production bundle
+        run: pnpm --filter web run build
+
+      - name: Run E2E against production build (journeys, axe, header WCAG 2.2, third-party, visual snapshots)
+        run: pnpm e2e
+        env:
+          E2E_SERVER_COMMAND: 'pnpm --filter web run start'
+
+      - name: Upload e2e results
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-results-e2e
+          path: quality-results/
+
+  lighthouse:
+    name: Lighthouse audits (performance/accessibility/SEO/BP)
+    runs-on: ubuntu-latest
+    needs: check
+    timeout-minutes: 20
+    env:
+      SKIP_PLACEHOLDER_CHECK: 'true'
+      # Lighthouse audits the launch configuration: the site intentionally
+      # noindexes the whole app pre-launch (robots.ts gated on
+      # NEXT_PUBLIC_IS_LIVE), so SEO is measured with the site live.
+      NEXT_PUBLIC_IS_LIVE: 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.5.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build production bundle
+        run: pnpm --filter web run build
+
+      - name: Start production server
+        run: nohup pnpm --filter web run start > quality-results/lighthouse-server.log 2>&1 &
+
+      - name: Wait for server
+        run: |
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:3000/ >/dev/null; then exit 0; fi
+            sleep 2
+          done
+          cat quality-results/lighthouse-server.log
+          exit 1
+
+      - name: Run Lighthouse suite
+        run: pnpm quality:lighthouse
+
+      - name: Upload lighthouse results
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-results-lighthouse
+          path: quality-results/
+
+  report:
+    name: Quality report
+    runs-on: ubuntu-latest
+    needs: [check, e2e, lighthouse]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: quality-results/
+          merge-multiple: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate quality-report.md
+        run: node scripts/generate-quality-report.mjs --from-artifacts

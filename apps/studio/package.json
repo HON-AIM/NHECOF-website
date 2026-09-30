@@ -1,0 +1,24 @@
+{
+  "name": "studio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "typecheck": "tsc --noEmit",
+    "typegen": "sanity typegen",
+    "seed": "tsx scripts/seed.ts"
+  },
+  "dependencies": {
+    "@sanity/client": "^7.1.0",
+    "@sanity/vision": "^3.87.0",
+    "sanity": "^3.87.0",
+    "styled-components": "^6.5.3"
+  },
+  "devDependencies": {
+    "dotenv": "^16.5.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.3"
+  }
+}

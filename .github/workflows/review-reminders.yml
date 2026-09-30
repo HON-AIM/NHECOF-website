@@ -1,0 +1,89 @@
+name: Review Reminders
+
+# Weekly reminder to the content manager listing Articles and Food Profiles
+# whose "Next Review Due" date has passed or falls due within 30 days.
+# The filter is identical to the Studio's own "Content Due for Review" list.
+#
+# Required repository secrets:
+#   SANITY_STUDIO_PROJECT_ID        Sanity project holding the content
+#   SANITY_API_READ_TOKEN           Viewer token for that project
+#   CONTENT_MANAGER_EMAIL           Recipient of the reminder
+#   RESEND_API_KEY                  Sending
+#   FORMS_EMAIL_FROM                Verified Resend sender
+#   NEXT_PUBLIC_SITE_URL            Used to build links (e.g. https://nhecof.org)
+
+on:
+  schedule:
+    # Mondays at 08:17 UTC. Deliberately not on the hour: scheduled workflows
+    # are queued by GitHub and a :00 slot is heavily oversubscribed.
+    - cron: "17 8 * * 1"
+  # Manual trigger: use this for a rehearsal, or to force a run after a batch
+  # of content has been published.
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Render the email but do not send it"
+        type: boolean
+        default: true
+      dataset:
+        description: "Sanity dataset to read"
+        type: string
+        default: development
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  remind:
+    name: Email content review reminders
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Self-test the reminder logic
+        run: node --test scripts/lib/review-reminders.test.mjs
+
+      - name: Dry run against the configured dataset
+        if: ${{ !github.event.inputs.dry_run || github.event.inputs.dry_run == 'true' }}
+        run: node scripts/send-review-reminders.mjs --dry-run --dataset=${{ github.event.inputs.dataset || 'development' }}
+        env:
+          SANITY_STUDIO_PROJECT_ID: ${{ secrets.SANITY_STUDIO_PROJECT_ID }}
+          SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+
+      - name: Send the reminder
+        if: ${{ github.event_name == 'schedule' || github.event.inputs.dry_run == 'false' }}
+        run: node scripts/send-review-reminders.mjs --dataset=${{ github.event.inputs.dataset || 'development' }}
+        env:
+          SANITY_STUDIO_PROJECT_ID: ${{ secrets.SANITY_STUDIO_PROJECT_ID }}
+          SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
+          CONTENT_MANAGER_EMAIL: ${{ secrets.CONTENT_MANAGER_EMAIL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          FORMS_EMAIL_FROM: ${{ secrets.FORMS_EMAIL_FROM }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+
+      - name: Upload the rendered email for inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: review-reminder-preview
+          path: |
+            ../../quality-results/review-reminder-preview.txt
+            ../../quality-results/review-reminder-preview.html
+          if-no-files-found: ignore

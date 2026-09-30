@@ -1,0 +1,17 @@
+packages:
+  - "apps/*"
+allowBuilds:
+  esbuild: true
+
+# Dependency overrides (pnpm >= 12 reads these from here, not from package.json).
+#
+# `postcss` is pinned up because Next.js 15.5.25 depends on postcss 8.4.31,
+# which has a high-severity advisory (GHSA-7fh5-64p2-3v2j) fixed in 8.5.10.
+# PostCSS 8.5.x is a compatible minor release within the same major, and
+# @tailwindcss/postcss already resolves to 8.5.28 in this workspace, so both
+# copies converge on the patched version.
+#
+# Remove this override once Next.js ships a release that depends on postcss
+# >= 8.5.10 — re-run `pnpm audit --prod` to confirm it is no longer needed.
+overrides:
+  postcss: "^8.5.10"
