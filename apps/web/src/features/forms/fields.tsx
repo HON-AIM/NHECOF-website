@@ -61,7 +61,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
         aria-describedby={describeBy(id, hint, error)}
         className={cn(
           'w-full rounded-md border bg-white px-3 py-2.5 text-base text-ink-900',
-          'placeholder:text-ink-300 focus:outline-none',
+          'placeholder:text-ink-400 focus:outline-none',
           error
             ? 'border-error focus:border-error'
             : 'border-ink-200 focus:border-leaf-600',
@@ -94,7 +94,7 @@ export const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>
         aria-describedby={describeBy(id, hint, error)}
         className={cn(
           'w-full resize-y rounded-md border bg-white px-3 py-2.5 text-base text-ink-900',
-          'placeholder:text-ink-300 focus:outline-none',
+          'placeholder:text-ink-400 focus:outline-none',
           error
             ? 'border-error focus:border-error'
             : 'border-ink-200 focus:border-leaf-600',

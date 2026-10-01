@@ -44,5 +44,5 @@ export function highlightMatches(text: string, query: string): string {
     .join('|')
   if (!escaped) return text
   const re = new RegExp(`(${escaped})`, 'gi')
-  return text.replace(re, '<mark class="bg-palm-200 text-ink-900 rounded-sm px-0.5">$1</mark>')
+  return text.replace(re, '<mark class="bg-clay-200 text-ink-900 rounded-sm px-0.5">$1</mark>')
 }

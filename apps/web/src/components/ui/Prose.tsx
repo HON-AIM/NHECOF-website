@@ -114,7 +114,7 @@ const calloutStyles: Record<NonNullable<CalloutBlock['type']>, string> = {
   info: 'bg-info-light border-l-info',
   warning: 'bg-warning-light border-l-warning',
   tip: 'bg-leaf-100 border-l-leaf-600',
-  important: 'bg-zobo-100 border-l-zobo-600',
+  important: 'bg-gold-100 border-l-gold-600',
 }
 
 function CalloutBlockRenderer({
@@ -137,8 +137,8 @@ function MythFactBlockRenderer({
   return (
     <div className="mb-6 overflow-hidden rounded-lg">
       <div className="grid md:grid-cols-2">
-        <div className="bg-zobo-50 p-4">
-          <p className="mb-1 text-xs font-bold uppercase tracking-wide text-zobo-600">Myth</p>
+        <div className="bg-gold-50 p-4">
+          <p className="mb-1 text-xs font-bold uppercase tracking-wide text-gold-800">Myth</p>
           <p className="text-sm text-ink-800">{value.myth}</p>
         </div>
         <div className="bg-leaf-50 p-4">

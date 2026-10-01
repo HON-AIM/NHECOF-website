@@ -51,7 +51,7 @@ export function ContactPanel() {
     <>
       {subject ? (
         <p className="text-sm text-ink-600">
-          <Badge variant="palm">Subject: {subject}</Badge>
+          <Badge variant="clay">Subject: {subject}</Badge>
           <span className="ml-2">
             Your message will start with the subject &ldquo;{subject}&rdquo;.
           </span>

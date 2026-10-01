@@ -412,7 +412,7 @@ function MobileNav({ open, onClose }: MobileNavProps) {
             href="/request-an-outreach"
             onClick={() => onClose(false)}
             className={cn(
-              'flex min-h-[48px] items-center justify-center rounded-lg bg-palm-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-palm-700',
+              'flex min-h-[48px] items-center justify-center rounded-lg bg-clay-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-clay-700',
               'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white',
             )}
           >
@@ -513,7 +513,7 @@ export function Header() {
           <NextLink
             href="/request-an-outreach"
             className={cn(
-              'hidden rounded-lg bg-palm-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-palm-700',
+              'hidden rounded-lg bg-clay-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-clay-700',
               'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white',
               'md:inline-block',
             )}

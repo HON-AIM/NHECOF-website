@@ -49,7 +49,7 @@ export function Newsletter({ enabled }: NewsletterProps) {
             />
             <button
               type="submit"
-              className="rounded-lg bg-palm-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-palm-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="rounded-lg bg-clay-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-clay-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Subscribe
             </button>

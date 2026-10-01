@@ -328,7 +328,7 @@ export default async function ArticlePage({ params }: PageProps) {
                     <Card className="h-full transition-shadow group-hover:shadow-md">
                       <CardBody>
                         <Badge
-                          variant={item._type === 'article' ? 'leaf' : 'palm'}
+                          variant={item._type === 'article' ? 'leaf' : 'clay'}
                           className="mb-2"
                         >
                           {typeLabel}

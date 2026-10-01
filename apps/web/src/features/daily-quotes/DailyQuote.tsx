@@ -164,7 +164,7 @@ export function DailyQuote() {
             <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-leaf-700">
               {topicLabel ? topicLabel : 'Quote of the day'}
             </p>
-            <blockquote className="border-l-4 border-palm-500 pl-5 md:pl-6">
+            <blockquote className="border-l-4 border-clay-500 pl-5 md:pl-6">
               <p className="font-display text-2xl leading-snug text-ink-900 md:text-3xl">
                 “{quote.text}”
               </p>

@@ -9,8 +9,8 @@ interface EyebrowProps {
 
 const variantClasses: Record<NonNullable<EyebrowProps['variant']>, string> = {
   default: 'text-leaf-700',
-  accent: 'text-palm-600',
-  caution: 'text-zobo-600',
+  accent: 'text-clay-600',
+  caution: 'text-gold-800',
 }
 
 export function Eyebrow({ children, variant = 'default', className }: EyebrowProps) {

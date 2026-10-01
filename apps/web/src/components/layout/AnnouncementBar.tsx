@@ -53,7 +53,7 @@ export function AnnouncementBar({ id, text, className }: AnnouncementBarProps) {
       role="status"
       aria-live="polite"
       className={cn(
-        'relative bg-palm-600 px-4 py-2.5 text-center text-sm font-medium text-white',
+        'relative bg-clay-600 px-4 py-2.5 text-center text-sm font-medium text-white',
         className,
       )}
     >

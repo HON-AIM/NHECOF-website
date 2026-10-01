@@ -227,7 +227,7 @@ export default async function AboutPage() {
                 ) : null}
 
                 {founder.founderStatement ? (
-                  <blockquote className="my-6 border-l-4 border-palm-600 pl-4 font-display text-lg italic leading-relaxed text-ink-700">
+                  <blockquote className="my-6 border-l-4 border-clay-600 pl-4 font-display text-lg italic leading-relaxed text-ink-700">
                     “{founder.founderStatement}”
                   </blockquote>
                 ) : null}

@@ -17,7 +17,7 @@ export default function NotFound() {
   return (
     <section className="mx-auto max-w-[var(--width-prose)] px-4 py-16 text-center md:px-8">
       <NotFoundTracker />
-      <p className="text-sm font-semibold tracking-wide text-palm-600">404</p>
+      <p className="text-sm font-semibold tracking-wide text-clay-600">404</p>
       <h1 className="mt-2 font-display text-3xl font-bold text-ink-900">
         Page not found
       </h1>

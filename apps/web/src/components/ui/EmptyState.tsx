@@ -18,7 +18,7 @@ export function EmptyState({
   return (
     <div className={cn('py-12 text-center', className)}>
       {icon ? (
-        <div className="mb-4 text-5xl text-ink-300" aria-hidden="true">
+        <div className="mb-4 text-5xl text-ink-400" aria-hidden="true">
           {icon}
         </div>
       ) : null}

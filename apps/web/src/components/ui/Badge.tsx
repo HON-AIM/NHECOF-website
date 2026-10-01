@@ -10,8 +10,8 @@ interface BadgeProps {
     | 'error'
     | 'info'
     | 'leaf'
-    | 'palm'
-    | 'zobo'
+    | 'clay'
+    | 'gold'
   size?: 'sm' | 'md'
   className?: string
 }
@@ -23,8 +23,8 @@ const variantClasses: Record<NonNullable<BadgeProps['variant']>, string> = {
   error: 'bg-error-light text-error-dark',
   info: 'bg-info-light text-info-dark',
   leaf: 'bg-leaf-100 text-leaf-800',
-  palm: 'bg-palm-100 text-palm-800',
-  zobo: 'bg-zobo-100 text-zobo-800',
+  clay: 'bg-clay-100 text-clay-800',
+  gold: 'bg-gold-100 text-gold-800',
 }
 
 const sizeClasses: Record<NonNullable<BadgeProps['size']>, string> = {

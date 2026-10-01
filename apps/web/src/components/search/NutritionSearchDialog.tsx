@@ -311,9 +311,9 @@ export function NutritionSearchDialog({
                           className={cn(
                             'inline-block rounded-sm border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide',
                             item.type === 'article' && 'border-leaf-200 bg-leaf-50 text-leaf-800',
-                            item.type === 'foodProfile' && 'border-palm-200 bg-palm-50 text-palm-800',
+                            item.type === 'foodProfile' && 'border-clay-200 bg-clay-50 text-clay-800',
                             item.type === 'outreach' && 'border-info/30 bg-info-light text-info-dark',
-                            item.type === 'resource' && 'border-zobo-200 bg-zobo-50 text-zobo-800',
+                            item.type === 'resource' && 'border-gold-200 bg-gold-50 text-gold-800',
                           )}
                         >
                           {TYPE_LABEL[item.type]}

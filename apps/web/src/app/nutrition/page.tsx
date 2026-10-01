@@ -162,9 +162,9 @@ export default async function NutritionHubPage() {
             <Link href="/nutrition/foods" className="group block">
               <Card className="h-full transition-shadow group-hover:shadow-md">
                 <CardBody className="flex flex-row items-start gap-4">
-                  <FoodIcon className="mt-1 h-10 w-10 shrink-0 text-palm-600" />
+                  <FoodIcon className="mt-1 h-10 w-10 shrink-0 text-clay-600" />
                   <div>
-                    <CardTitle className="group-hover:text-palm-700 transition-colors">
+                    <CardTitle className="group-hover:text-clay-700 transition-colors">
                       Nigerian Food Profiles
                     </CardTitle>
                     <CardDescription>
@@ -214,11 +214,11 @@ export default async function NutritionHubPage() {
             {featuredFood ? (
               <Card className="h-full bg-leaf-50 border-leaf-100">
                 <CardBody>
-                  <Badge variant="palm" className="mb-3">Editor&apos;s Pick</Badge>
+                  <Badge variant="clay" className="mb-3">Editor&apos;s Pick</Badge>
                   <CardTitle>
                     <Link
                       href={`/nutrition/foods/${featuredFood.slug.current}`}
-                      className="hover:text-palm-700 transition-colors"
+                      className="hover:text-clay-700 transition-colors"
                     >
                       {featuredFood.title}
                     </Link>

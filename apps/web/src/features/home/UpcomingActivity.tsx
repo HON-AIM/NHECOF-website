@@ -34,7 +34,7 @@ export function UpcomingActivity({ activity }: UpcomingActivityProps) {
   return (
     <section
       aria-labelledby="upcoming-heading"
-      className="bg-palm-50 border-y border-palm-200"
+      className="bg-clay-50 border-y border-clay-200"
     >
       <Container width="wide" className="py-10 md:py-14">
         <div className="flex flex-wrap items-center gap-3">
@@ -44,10 +44,10 @@ export function UpcomingActivity({ activity }: UpcomingActivityProps) {
           >
             Upcoming activity
           </h2>
-          <Badge variant="palm">Coming up</Badge>
+          <Badge variant="clay">Coming up</Badge>
         </div>
 
-        <div className="mt-5 rounded-xl border border-palm-200 bg-white p-6">
+        <div className="mt-5 rounded-xl border border-clay-200 bg-white p-6">
           <h3 className="font-display text-lg font-semibold text-ink-900">
             <NextLink href={href} className="hover:text-leaf-700">
               {activity.title}
@@ -56,12 +56,12 @@ export function UpcomingActivity({ activity }: UpcomingActivityProps) {
 
           <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-ink-500">
             <span className="inline-flex items-center gap-1.5">
-              <CalendarIcon className="h-4 w-4 text-palm-600" />
+              <CalendarIcon className="h-4 w-4 text-clay-600" />
               <time dateTime={activity.date}>{formatDateFull(activity.date)}</time>
             </span>
             {locationParts.length > 0 && (
               <span className="inline-flex items-center gap-1.5">
-                <LocationIcon className="h-4 w-4 text-palm-600" />
+                <LocationIcon className="h-4 w-4 text-clay-600" />
                 {locationParts.join(', ')}
               </span>
             )}

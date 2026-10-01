@@ -157,7 +157,7 @@ export function OutreachRequestForm() {
                 </span>
                 <span className="hidden sm:inline">{item.title}</span>
               </span>
-              {index < STEPS.length - 1 ? <span className="text-ink-300" aria-hidden="true">→</span> : null}
+              {index < STEPS.length - 1 ? <span className="text-ink-400" aria-hidden="true">→</span> : null}
             </li>
           )
         })}

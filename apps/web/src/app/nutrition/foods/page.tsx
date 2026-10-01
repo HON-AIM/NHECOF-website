@@ -101,7 +101,7 @@ export default async function FoodProfilesPage({ searchParams }: PageProps) {
           <Link
             href="/nutrition/foods"
             aria-current="page"
-            className="rounded-full bg-palm-600 px-3 py-1 font-medium text-white"
+            className="rounded-full bg-clay-600 px-3 py-1 font-medium text-white"
           >
             Food Profiles
           </Link>
@@ -200,7 +200,7 @@ export default async function FoodProfilesPage({ searchParams }: PageProps) {
                         </div>
                       ) : null}
                       <CardBody>
-                        <CardTitle as="h2" className="group-hover:text-palm-700 transition-colors">
+                        <CardTitle as="h2" className="group-hover:text-clay-700 transition-colors">
                           {profile.title}
                         </CardTitle>
                         {profile.aliases && profile.aliases.length > 0 ? (
@@ -212,7 +212,7 @@ export default async function FoodProfilesPage({ searchParams }: PageProps) {
                         {profile.categories && profile.categories.length > 0 ? (
                           <div className="mt-3 flex flex-wrap gap-1">
                             {profile.categories.map((cat) => (
-                              <Badge key={cat._id} variant="palm" className="text-xs">
+                              <Badge key={cat._id} variant="clay" className="text-xs">
                                 {cat.title}
                               </Badge>
                             ))}

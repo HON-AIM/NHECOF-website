@@ -112,7 +112,7 @@ export default async function OutreachPage({ params }: PageProps) {
             </Badge>
             <Badge variant="info">{outreach.theme}</Badge>
             {outreach.verified && outreach.status === 'completed' ? (
-              <Badge variant="palm">Verified record</Badge>
+              <Badge variant="clay">Verified record</Badge>
             ) : null}
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-ink-500">

@@ -74,20 +74,28 @@ const pairs = [
   ['ink-800', 'paper-50', false, 'Body text secondary (ink-800 on paper-50)'],
   ['ink-700', 'paper-50', false, 'Muted text (ink-700 on paper-50)'],
   ['ink-500', 'paper-50', false, 'Subtle text (ink-500 on paper-50)'],
-  ['ink-400', 'paper-50', false, 'Placeholder text (ink-400 on paper-50)', true],
+  // Placeholder/muted copy uses ink-400, the lightest text-permitted step
+  // (4.98:1 on paper-50, 4.81:1 on paper-100).
+  ['ink-400', 'paper-50', false, 'Placeholder text (ink-400 on paper-50)'],
   ['ink-400', 'paper-100', false, 'Placeholder text (ink-400 on paper-100)'],
+  // paper-200 is a mid-tone surface: ink-400 (4.1:1) and ink-500 (4.2:1) both
+  // fall short there, so muted copy steps up to ink-600. Same for darker surfaces.
+  ['ink-600', 'paper-200', false, 'Placeholder text (ink-600 on paper-200)'],
   ['ink-500', 'paper-100', false, 'Muted caption (ink-500 on paper-100)'],
 
-  // White text on brand colours
+  // White text on brand colours.
+  // Clay is the CTA colour, so it carries white text at AA.
   ['#ffffff', 'leaf-700', false, 'White on leaf-700 (buttons)'],
   ['#ffffff', 'leaf-900', false, 'White on leaf-900'],
   ['#ffffff', 'leaf-950', false, 'White on leaf-950'],
-  ['#ffffff', 'palm-600', false, 'White on palm-600 (action buttons)'],
-  ['#ffffff', 'palm-700', false, 'White on palm-700'],
-  ['#ffffff', 'palm-900', false, 'White on palm-900'],
-  ['#ffffff', 'zobo-600', false, 'White on zobo-600'],
-  ['#ffffff', 'zobo-700', false, 'White on zobo-700'],
-  ['#ffffff', 'zobo-900', false, 'White on zobo-900'],
+  ['#ffffff', 'clay-600', false, 'White on clay-600 (PRIMARY CTA)'],
+  ['#ffffff', 'clay-700', false, 'White on clay-700'],
+  ['#ffffff', 'clay-900', false, 'White on clay-900'],
+  // Gold is a HIGHLIGHT, not a CTA. white-on-gold-600 is 3.7:1 and cannot take
+  // body text; gold-700 (4.7:1) is the floor if white text is ever needed.
+  ['#ffffff', 'gold-700', false, 'White on gold-700 (gold floor for white text)'],
+  ['#ffffff', 'gold-800', false, 'White on gold-800'],
+  ['#ffffff', 'gold-900', false, 'White on gold-900'],
   ['#ffffff', 'ink-900', false, 'White on ink-900'],
   ['#ffffff', 'ink-800', false, 'White on ink-800'],
 
@@ -96,12 +104,27 @@ const pairs = [
   ['leaf-700', '#ffffff', false, 'Leaf-700 on white'],
   ['leaf-800', 'paper-50', false, 'Leaf-800 on paper-50'],
   ['leaf-900', 'paper-50', false, 'Leaf-900 on paper-50'],
-  ['palm-600', 'paper-50', false, 'Palm-600 on paper-50 (action text)'],
-  ['palm-700', 'paper-50', false, 'Palm-700 on paper-50'],
-  ['palm-900', 'paper-50', false, 'Palm-900 on paper-50'],
-  ['zobo-600', 'paper-50', false, 'Zobo-600 on paper-50 (caution text)'],
-  ['zobo-700', 'paper-50', false, 'Zobo-700 on paper-50'],
-  ['zobo-900', 'paper-50', false, 'Zobo-900 on paper-50'],
+  ['clay-600', 'paper-50', false, 'Clay-600 on paper-50 (action text)'],
+  ['clay-700', 'paper-50', false, 'Clay-700 on paper-50'],
+  ['clay-900', 'paper-50', false, 'Clay-900 on paper-50'],
+  // Gold as TEXT on paper: gold-600 (3.4:1) and gold-700 (4.3:1) both fail AA at
+  // normal size. gold-800 is the floor for gold body text; 600/700 are large-text
+  // or rule accents only, asserted below at the 3:1 threshold.
+  ['gold-800', 'paper-50', false, 'Gold-800 on paper-50 (gold body text)'],
+  ['gold-900', 'paper-50', false, 'Gold-900 on paper-50'],
+  ['gold-600', 'paper-50', true, 'Gold-600 on paper-50 (LARGE text/rule only)'],
+  ['gold-600', 'paper-100', true, 'Gold-600 on paper-100 (LARGE text/rule only)'],
+
+  // Highlight and callout surfaces: ink on the pale tints, never gold on gold.
+  ['ink-900', 'gold-100', false, 'Ink-900 on gold-100 (quote block)'],
+  ['ink-900', 'gold-50', false, 'Ink-900 on gold-50 (quote block, subtle)'],
+  ['ink-700', 'gold-100', false, 'Ink-700 on gold-100'],
+  ['ink-900', 'clay-100', false, 'Ink-900 on clay-100 (callout)'],
+  ['ink-900', 'leaf-100', false, 'Ink-900 on leaf-100'],
+  // Badge surfaces
+  ['gold-800', 'gold-100', false, 'Gold-800 on gold-100 (gold badge)'],
+  ['clay-800', 'clay-100', false, 'Clay-800 on clay-100 (clay badge)'],
+  ['leaf-800', 'leaf-100', false, 'Leaf-800 on leaf-100 (leaf badge)'],
 
   // Headings
   ['ink-900', 'paper-50', true, 'Heading on paper-50 (large text)'],
@@ -117,10 +140,12 @@ const pairs = [
   ['info', '#ffffff', false, 'Info text on white'],
   ['info-dark', 'paper-50', false, 'Info dark on paper-50'],
 
-  // UI elements: borders on backgrounds
-  ['ink-200', 'paper-50', false, 'Border (ink-200 on paper-50)', false, true],
-  ['ink-300', 'paper-50', false, 'Border subtle (ink-300 on paper-50)', false, true],
+  // UI elements: borders on backgrounds.
+  // ink-100/200/300 are DECORATIVE ONLY — all fall below 3:1 on paper and are
+  // never used for text. ink-400 is the floor for meaningful borders.
+  ['ink-400', 'paper-50', false, 'Border floor (ink-400 on paper-50)', false, true],
   ['leaf-300', 'paper-50', false, 'Focus ring (leaf-300 on paper-50)', false, true],
+  ['leaf-400', 'paper-50', false, 'Border (leaf-400 on paper-50)', false, true],
 
   // Leaf buttons pressed/hover states
   ['leaf-600', 'paper-50', false, 'Leaf-600 on paper-50'],

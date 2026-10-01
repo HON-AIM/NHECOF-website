@@ -53,28 +53,28 @@ export default function StyleguidePage() {
           <Swatch name="leaf-900" bg="bg-leaf-900" text="text-white" />
           <Swatch name="leaf-950" bg="bg-leaf-950" text="text-white" />
         </TokenSwatchGroup>
-        <TokenSwatchGroup title="Palm Oil (Action/Accent)">
-          <Swatch name="palm-50" bg="bg-palm-50" />
-          <Swatch name="palm-100" bg="bg-palm-100" />
-          <Swatch name="palm-200" bg="bg-palm-200" />
-          <Swatch name="palm-300" bg="bg-palm-300" />
-          <Swatch name="palm-400" bg="bg-palm-400" />
-          <Swatch name="palm-500" bg="bg-palm-500" text="text-white" />
-          <Swatch name="palm-600" bg="bg-palm-600" text="text-white" />
-          <Swatch name="palm-700" bg="bg-palm-700" text="text-white" />
-          <Swatch name="palm-800" bg="bg-palm-800" text="text-white" />
-          <Swatch name="palm-900" bg="bg-palm-900" text="text-white" />
+        <TokenSwatchGroup title="Clay Oil (Action/Accent)">
+          <Swatch name="clay-50" bg="bg-clay-50" />
+          <Swatch name="clay-100" bg="bg-clay-100" />
+          <Swatch name="clay-200" bg="bg-clay-200" />
+          <Swatch name="clay-300" bg="bg-clay-300" />
+          <Swatch name="clay-400" bg="bg-clay-400" />
+          <Swatch name="clay-500" bg="bg-clay-500" text="text-white" />
+          <Swatch name="clay-600" bg="bg-clay-600" text="text-white" />
+          <Swatch name="clay-700" bg="bg-clay-700" text="text-white" />
+          <Swatch name="clay-800" bg="bg-clay-800" text="text-white" />
+          <Swatch name="clay-900" bg="bg-clay-900" text="text-white" />
         </TokenSwatchGroup>
-        <TokenSwatchGroup title="Zobo (Highlight/Caution)">
-          <Swatch name="zobo-50" bg="bg-zobo-50" />
-          <Swatch name="zobo-100" bg="bg-zobo-100" />
-          <Swatch name="zobo-200" bg="bg-zobo-200" />
-          <Swatch name="zobo-300" bg="bg-zobo-300" />
-          <Swatch name="zobo-400" bg="bg-zobo-400" />
-          <Swatch name="zobo-600" bg="bg-zobo-600" text="text-white" />
-          <Swatch name="zobo-700" bg="bg-zobo-700" text="text-white" />
-          <Swatch name="zobo-800" bg="bg-zobo-800" text="text-white" />
-          <Swatch name="zobo-900" bg="bg-zobo-900" text="text-white" />
+        <TokenSwatchGroup title="Gold (Highlight/Caution)">
+          <Swatch name="gold-50" bg="bg-gold-50" />
+          <Swatch name="gold-100" bg="bg-gold-100" />
+          <Swatch name="gold-200" bg="bg-gold-200" />
+          <Swatch name="gold-300" bg="bg-gold-300" />
+          <Swatch name="gold-400" bg="bg-gold-400" />
+          <Swatch name="gold-600" bg="bg-gold-600" text="text-white" />
+          <Swatch name="gold-700" bg="bg-gold-700" text="text-white" />
+          <Swatch name="gold-800" bg="bg-gold-800" text="text-white" />
+          <Swatch name="gold-900" bg="bg-gold-900" text="text-white" />
         </TokenSwatchGroup>
         <TokenSwatchGroup title="Paper (Backgrounds)">
           <Swatch name="paper-50" bg="bg-paper-50" />
@@ -203,7 +203,7 @@ export default function StyleguidePage() {
             <button className="rounded-md bg-leaf-700 px-6 py-3 text-base font-semibold text-white hover:bg-leaf-800">Primary LG</button>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <button className="rounded-md bg-palm-600 px-4 py-2 text-sm font-semibold text-white hover:bg-palm-700">Secondary</button>
+            <button className="rounded-md bg-clay-600 px-4 py-2 text-sm font-semibold text-white hover:bg-clay-700">Secondary</button>
             <button className="rounded-md border border-ink-200 bg-transparent px-4 py-2 text-sm font-medium text-ink-700 hover:bg-paper-100">Quiet</button>
             <button className="bg-transparent text-sm font-medium text-leaf-700 underline underline-offset-4 hover:text-leaf-800">Link Button</button>
           </div>
@@ -220,15 +220,15 @@ export default function StyleguidePage() {
       {/* ── Badge ─────────────────────────────────────────────────────── */}
       <Section title="Badges">
         <div className="flex flex-wrap gap-2">
-          {['default', 'success', 'warning', 'error', 'info', 'leaf', 'palm', 'zobo'].map((v) => (
+          {['default', 'success', 'warning', 'error', 'info', 'leaf', 'clay', 'gold'].map((v) => (
             <span key={v} className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
               v === 'success' ? 'bg-success-light text-success-dark' :
               v === 'warning' ? 'bg-warning-light text-warning-dark' :
               v === 'error' ? 'bg-error-light text-error-dark' :
               v === 'info' ? 'bg-info-light text-info-dark' :
               v === 'leaf' ? 'bg-leaf-100 text-leaf-800' :
-              v === 'palm' ? 'bg-palm-100 text-palm-800' :
-              v === 'zobo' ? 'bg-zobo-100 text-zobo-800' :
+              v === 'clay' ? 'bg-clay-100 text-clay-800' :
+              v === 'gold' ? 'bg-gold-100 text-gold-800' :
               'bg-ink-100 text-ink-700'
             }`}>{v}</span>
           ))}
@@ -239,8 +239,8 @@ export default function StyleguidePage() {
       <Section title="Eyebrows">
         <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-widest text-leaf-700">Default Eyebrow</p>
-          <p className="text-xs font-semibold uppercase tracking-widest text-palm-600">Accent Eyebrow</p>
-          <p className="text-xs font-semibold uppercase tracking-widest text-zobo-600">Caution Eyebrow</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-clay-600">Accent Eyebrow</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-gold-800">Caution Eyebrow</p>
         </div>
       </Section>
 
@@ -253,12 +253,12 @@ export default function StyleguidePage() {
             <p className="text-sm text-ink-400">As of Dec 2025</p>
           </div>
           <div className="text-center">
-            <p className="text-4xl font-display font-bold text-palm-600">3</p>
+            <p className="text-4xl font-display font-bold text-clay-600">3</p>
             <p className="mt-1 text-lg text-ink-700">Nigerian States</p>
             <p className="text-sm text-ink-400">As of Dec 2025</p>
           </div>
           <div className="text-center">
-            <p className="text-4xl font-display font-bold text-zobo-600">10+</p>
+            <p className="text-4xl font-display font-bold text-gold-800">10+</p>
             <p className="mt-1 text-lg text-ink-700">Outreaches Completed</p>
             <p className="text-sm text-ink-400">As of Dec 2025</p>
           </div>
@@ -342,7 +342,7 @@ export default function StyleguidePage() {
             </div>
           </div>
           <div className="overflow-hidden rounded-lg border border-ink-100 bg-white shadow-sm">
-            <div className="aspect-[16/10] bg-palm-100" />
+            <div className="aspect-[16/10] bg-clay-100" />
             <div className="p-5">
               <h3 className="font-display text-lg font-semibold text-ink-900">Food Card</h3>
               <p className="mt-1 text-sm text-ink-600 line-clamp-2">Millet is a drought-resistant cereal grain widely cultivated in Northern Nigeria.</p>
@@ -350,7 +350,7 @@ export default function StyleguidePage() {
             </div>
           </div>
           <div className="overflow-hidden rounded-lg border border-ink-100 bg-white shadow-sm">
-            <div className="aspect-[16/10] bg-zobo-100" />
+            <div className="aspect-[16/10] bg-gold-100" />
             <div className="p-5">
               <h3 className="font-display text-lg font-semibold text-ink-900">Outreach Card</h3>
               <p className="mt-1 text-sm text-ink-600 line-clamp-2">Community nutrition screening in Bodija, Ibadan.</p>
@@ -394,7 +394,7 @@ export default function StyleguidePage() {
         </div>
         <p className="mb-2 text-sm text-ink-600">Waves variant:</p>
         <div className="mb-6 h-10 bg-paper-50">
-          <svg width="100%" height="40" aria-hidden="true" className="text-palm-300">
+          <svg width="100%" height="40" aria-hidden="true" className="text-clay-300">
             <defs>
               <pattern id="sg-waves" x="0" y="0" width="40" height="20" patternUnits="userSpaceOnUse">
                 <path d="M0 10 Q10 0 20 10 T40 10" fill="none" stroke="currentColor" strokeWidth="1.5" />
@@ -405,7 +405,7 @@ export default function StyleguidePage() {
         </div>
         <p className="mb-2 text-sm text-ink-600">Dots variant:</p>
         <div className="mb-6 h-10 bg-paper-50">
-          <svg width="100%" height="40" aria-hidden="true" className="text-zobo-300">
+          <svg width="100%" height="40" aria-hidden="true" className="text-gold-300">
             <defs>
               <pattern id="sg-dots" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
                 <circle cx="8" cy="8" r="2" fill="currentColor" />
@@ -419,7 +419,7 @@ export default function StyleguidePage() {
       {/* ── Empty State ───────────────────────────────────────────────── */}
       <Section title="Empty State">
         <div className="rounded-lg border-2 border-dashed border-ink-200 py-12 text-center">
-          <p className="text-5xl text-ink-300">📋</p>
+          <p className="text-5xl text-ink-400">📋</p>
           <p className="mt-4 text-lg font-semibold text-ink-700">No articles found</p>
           <p className="mt-1 text-sm text-ink-500">Try adjusting your search or filters.</p>
         </div>

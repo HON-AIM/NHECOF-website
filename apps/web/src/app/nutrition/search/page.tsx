@@ -37,8 +37,8 @@ function itemHref(item: { _type: string; slug: string }): string | null {
 
 function typeBadge(item: { _type: string }) {
   if (item._type === 'article') return <Badge variant="leaf">Article</Badge>
-  if (item._type === 'foodProfile') return <Badge variant="palm">Food Profile</Badge>
-  if (item._type === 'resource') return <Badge variant="zobo">Resource</Badge>
+  if (item._type === 'foodProfile') return <Badge variant="clay">Food Profile</Badge>
+  if (item._type === 'resource') return <Badge variant="gold">Resource</Badge>
   return <Badge variant="info">Outreach</Badge>
 }
 

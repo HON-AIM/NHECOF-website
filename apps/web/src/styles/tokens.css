@@ -1,65 +1,86 @@
 @import 'tailwindcss';
 
 /*
- * NHECOF Design Tokens — "Field notes from the community"
+ * NHECOF Design Tokens — "Editorial Leaf & Clay"
  *
- * Colours verified for WCAG 2.2 AA contrast against their intended backgrounds.
- * Body text on Paper-50: Ink-900 (#22201C on #FBF6EC) → contrast 14.3:1 ✓
- * Body text on Paper-100: Ink-900 (#22201C on #F3EAD7) → contrast 12.5:1 ✓
- * Palm-600 buttons (#B0470E) with white text (#FFFFFF) → contrast 4.9:1 ✓
- * Leaf-700 on Paper-50: (#1F5A3F on #FBF6EC) → contrast 7.4:1 ✓
+ * Client-confirmed direction. Every value marked "client-confirmed" below is
+ * verbatim from the approved palette; other ramp steps are OKLab-derived from
+ * those anchors and are not client-approved.
+ *
+ * Measured against their intended backgrounds (pnpm check:contrast):
+ * Ink-900 on Paper-50 → 14.96:1 ✓   Ink-700 on Paper-50 → 8.74:1 ✓
+ * Ink-500 on Paper-50 → 5.14:1 ✓    (lightest permitted text floor)
+ * White on Clay-600 (CTA) → 5.34:1 ✓
+ * White on Leaf-700 → 10.64:1 ✓     Leaf-700 on Paper-50 → 9.78:1 ✓
+ * Ink-900 on Gold-100 (quote) → 12.88:1 ✓
  */
 
 @theme {
-  /* ── Brand: Leaf (primary) ─────────────────────────────────────────────────── */
-  --color-leaf-950: #0d1f16;
-  --color-leaf-900: #16352a;
-  --color-leaf-800: #1a4532;
-  --color-leaf-700: #1f5a3f;
-  --color-leaf-600: #2b7050;
-  --color-leaf-500: #307a50;
-  --color-leaf-400: #5aa676;
-  --color-leaf-300: #4f9a70;
-  --color-leaf-200: #b5d9c4;
-  --color-leaf-100: #dcebdd;
-  --color-leaf-50: #f0f7f2;
+  /* ── Brand: Leaf (primary) ───────────────────────────────────────────────────
+   * Client-confirmed: 900, 700, 500, 300, 100. Other steps OKLab-derived
+   * from those anchors and are NOT client-approved. */
+  --color-leaf-950: #0f231c;
+  --color-leaf-900: #122a20;
+  --color-leaf-800: #183828;
+  --color-leaf-700: #1e4630;
+  --color-leaf-600: #265139;
+  --color-leaf-500: #2f5d42;
+  --color-leaf-400: #4d765b;
+  --color-leaf-300: #6b8f76;
+  --color-leaf-200: #a2baa8;
+  --color-leaf-100: #dce6dd;
+  --color-leaf-50: #fafdf8;
 
-  /* ── Brand: Palm oil (action/accent) ───────────────────────────────────────── */
-  --color-palm-900: #5c2800;
-  --color-palm-800: #7a3400;
-  --color-palm-700: #9a3f08;
-  --color-palm-600: #b0470e;
-  --color-palm-500: #c75b1a;
-  --color-palm-400: #f0a03c;
-  --color-palm-300: #f5be6e;
-  --color-palm-200: #f8d8a0;
-  --color-palm-100: #fbe7cc;
-  --color-palm-50: #fdf5ea;
+  /* ── Brand: Clay (action/accent — CTAs, sparingly, never decoration) ─────────
+   * Client-confirmed: 600, 400, 100. */
+  --color-clay-950: #6f0000;
+  --color-clay-900: #780500;
+  --color-clay-800: #882606;
+  --color-clay-700: #993d1d;
+  --color-clay-600: #a9522f;
+  --color-clay-500: #b96741;
+  --color-clay-400: #c97c52;
+  --color-clay-300: #d79c7b;
+  --color-clay-200: #e4bca3;
+  --color-clay-100: #f0dccb;
+  --color-clay-50: #f5ecdf;
 
-  /* ── Brand: Zobo (highlight/caution) ───────────────────────────────────────── */
-  --color-zobo-900: #4a1525;
-  --color-zobo-800: #5e1c30;
-  --color-zobo-700: #731f38;
-  --color-zobo-600: #8c2a45;
-  --color-zobo-500: #a63656;
-  --color-zobo-400: #c45a7a;
-  --color-zobo-300: #d88da5;
-  --color-zobo-200: #e8b5c4;
-  --color-zobo-100: #f5dde3;
-  --color-zobo-50: #fdf0f3;
+  /* ── Brand: Gold (highlight — quotes/callouts, kept distinct from Clay) ──────
+   * Client-confirmed: 600, 100.
+   * USAGE: ink-900 on gold-100 for quote blocks. Gold-800 for gold body text.
+   * gold-600/700 as TEXT on paper fail AA (3.4:1 / 4.3:1) — large text or rules only.
+   * Never white text on gold-600 (3.7:1). */
+  --color-gold-950: #763800;
+  --color-gold-900: #7e4200;
+  --color-gold-800: #8c5600;
+  --color-gold-700: #9b6a00;
+  --color-gold-600: #a97e1e;
+  --color-gold-500: #b79247;
+  --color-gold-400: #c6a668;
+  --color-gold-300: #d4bb87;
+  --color-gold-200: #e3cfa6;
+  --color-gold-100: #f1e4c4;
+  --color-gold-50: #f8eed3;
 
-  /* ── Paper (backgrounds) ───────────────────────────────────────────────────── */
-  --color-paper-50: #fbf6ec;
-  --color-paper-100: #f3ead7;
-  --color-paper-200: #e7dbc0;
-  --color-paper-300: #d9cca8;
-  --color-paper-400: #c4b48a;
+  /* ── Paper (backgrounds) ─────────────────────────────────────────────────────
+   * Client-confirmed: 50, 100, 200. No steps above 400 — this is a light ramp. */
+  --color-paper-50: #faf5ea;
+  --color-paper-100: #f7f1e4;
+  --color-paper-200: #eadfc6;
+  --color-paper-300: #ddcda8;
+  --color-paper-400: #d0bb8a;
 
-  /* ── Ink (text) ────────────────────────────────────────────────────────────── */
+  /* ── Ink (text) ──────────────────────────────────────────────────────────────
+   * Client-confirmed: 900, 700, 500.
+   * ink-400 is the lightest step permitted to carry TEXT (4.98:1 on paper-50,
+   * 4.81:1 on paper-100) and is used for muted/placeholder copy. On paper-200
+   * step up to ink-500 (4.23) — ink-400 is 4.10 there and does not qualify.
+   * ink-100/200/300 are DECORATIVE tints only: below 3:1 on paper, so they must
+   * not carry text, placeholders or meaningful borders. */
   --color-ink-900: #22201c;
-  --color-ink-800: #302d27;
+  --color-ink-800: #35322c;
   --color-ink-700: #4a453d;
-  --color-ink-600: #5c564d;
+  --color-ink-600: #5c564c;
   --color-ink-500: #6e675b;
   --color-ink-400: #70695f;
   --color-ink-300: #857f77;

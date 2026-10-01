@@ -78,7 +78,7 @@ export default async function FoodProfilePage({ params }: PageProps) {
               <dt className="text-sm font-medium text-ink-700">{nutrient.name}</dt>
               <dd className="text-ink-600">
                 {nutrient.amount ? (
-                  <span className="block text-base font-semibold text-palm-700">
+                  <span className="block text-base font-semibold text-clay-700">
                     {nutrient.amount}
                   </span>
                 ) : null}
@@ -122,7 +122,7 @@ export default async function FoodProfilePage({ params }: PageProps) {
           {profile.categories && profile.categories.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {profile.categories.map((cat) => (
-                <Badge key={cat._id} variant="palm">
+                <Badge key={cat._id} variant="clay">
                   {cat.title}
                 </Badge>
               ))}

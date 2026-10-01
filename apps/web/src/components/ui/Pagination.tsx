@@ -109,7 +109,7 @@ export function Pagination({
       ) : (
         <span
           aria-disabled="true"
-          className="rounded-md px-3 py-1.5 text-sm font-medium text-ink-300"
+          className="rounded-md px-3 py-1.5 text-sm font-medium text-ink-400"
         >
           Previous
         </span>
@@ -163,7 +163,7 @@ export function Pagination({
       ) : (
         <span
           aria-disabled="true"
-          className="rounded-md px-3 py-1.5 text-sm font-medium text-ink-300"
+          className="rounded-md px-3 py-1.5 text-sm font-medium text-ink-400"
         >
           Next
         </span>
